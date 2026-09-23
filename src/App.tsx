@@ -7,7 +7,8 @@ interface BeforeInstallPromptEvent extends Event {
 
 const soundModules = import.meta.glob('./sonidos/*.mp3', {
   eager: true,
-  as: 'url',
+  query: '?url',
+  import: 'default',
 })
 
 const VARIANT = ['default', 'orange', 'blue', 'green'] as const
