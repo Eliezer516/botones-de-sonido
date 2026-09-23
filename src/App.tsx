@@ -1,45 +1,45 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
+  prompt: () => Promise<void>;
 }
 
-const soundModules = import.meta.glob('./sonidos/*.mp3', {
+const soundModules = import.meta.glob("./sonidos/*.mp3", {
   eager: true,
-  query: '?url',
-  import: 'default',
-})
+  query: "?url",
+  import: "default",
+});
 
-const VARIANT = ['default', 'orange', 'blue', 'green'] as const
+const VARIANT = ["default", "orange", "blue", "green"] as const;
 
 const sounds = Object.entries(soundModules).map(([path, url], index) => ({
   url,
-  label: path.replace('./sonidos/', '').replace(/\.mp3$/i, ''),
+  label: path.replace("./sonidos/", "").replace(/\.mp3$/i, ""),
   variant: VARIANT[index % VARIANT.length],
-}))
+}));
 
 function App() {
   const [installPrompt, setInstallPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
+    useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     const handleInstallPrompt = (event: Event) => {
-      event.preventDefault()
-      setInstallPrompt(event as BeforeInstallPromptEvent)
-    }
-    const handleInstalled = () => setInstallPrompt(null)
-    window.addEventListener('beforeinstallprompt', handleInstallPrompt)
-    window.addEventListener('appinstalled', handleInstalled)
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+    const handleInstalled = () => setInstallPrompt(null);
+    window.addEventListener("beforeinstallprompt", handleInstallPrompt);
+    window.addEventListener("appinstalled", handleInstalled);
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleInstallPrompt)
-      window.removeEventListener('appinstalled', handleInstalled)
-    }
-  }, [])
+      window.removeEventListener("beforeinstallprompt", handleInstallPrompt);
+      window.removeEventListener("appinstalled", handleInstalled);
+    };
+  }, []);
 
   const handleInstall = () => {
-    void installPrompt?.prompt()
-  }
+    void installPrompt?.prompt();
+  };
 
   return (
     <main className="app">
@@ -61,10 +61,10 @@ function App() {
           <button
             key={sound.url}
             type="button"
-            className={`nb-button ${sound.variant} rounded app-button`}
+            className={`nb-button green rounded app-button`}
             onClick={() => {
-              const audio = new Audio(sound.url)
-              void audio.play()
+              const audio = new Audio(sound.url);
+              void audio.play();
             }}
           >
             {sound.label}
@@ -72,7 +72,7 @@ function App() {
         ))}
       </div>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;
